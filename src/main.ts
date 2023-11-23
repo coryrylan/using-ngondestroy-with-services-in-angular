@@ -1,16 +1,25 @@
-import './polyfills';
+import { Component } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { HelloComponent } from './hello.component';
+import 'zone.js';
+import { CommonModule } from '@angular/common';
 
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [HelloComponent, CommonModule],
+  template: `
+    <a href="https://coryrylan.com/blog/using-ngondestroy-with-services-in-angular">
+      <h1>ngOnDestroy with Angular Services</h1>
+    </a>
 
-import { AppModule } from './app/app.module';
+    <button (click)="show = !show">toggle</button>
 
-platformBrowserDynamic().bootstrapModule(AppModule).then(ref => {
-  // Ensure Angular destroys itself on hot reloads.
-  if (window['ngRef']) {
-    window['ngRef'].destroy();
-  }
-  window['ngRef'] = ref;
+    <app-hello *ngIf="show"></app-hello>
+  `,
+})
+export class App {
+  show = true;
+}
 
-  // Otherwise, log the boot error
-}).catch(err => console.error(err));
+bootstrapApplication(App);
